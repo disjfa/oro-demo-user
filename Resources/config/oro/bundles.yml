@@ -1,0 +1,2 @@
+bundles:
+    - {name: Disjfa\DemoBundle\DisjfaDemoBundle, priority: 300}

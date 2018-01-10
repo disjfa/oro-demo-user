@@ -1,0 +1,16 @@
+connector:
+  name: oro_importexport
+  jobs:
+    demo_import_customer:
+      title: 'Customer import from online'
+      type: import
+      steps:
+        import:
+          title: import
+          class: Oro\Bundle\BatchBundle\Step\ItemStep
+          services:
+            reader: disjfa_demo.provider.customer_connector
+            processor: oro_importexport.processor.import_delegate
+            writer: oro_integration.writer.persistent_batch_writer
+          parameters:
+            batch_size: 25
