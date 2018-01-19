@@ -1,3 +1,8 @@
+parameters:
+    # entities
+    disjfa_demo.customer.entity.class: Disjfa\DemoBundle\Entity\Customer
+
+
 services:
   disjfa_demo.provider.demo_channel_type:
     class: Disjfa\DemoBundle\Provider\DemoChannelType
@@ -9,22 +14,3 @@ services:
     parent: oro_integration.transport.rest.abstract_transport
     tags:
       - { name: oro_integration.transport, type: rest, channel_type: disjfa_demo }
-
-  disjfa_demo.provider.customer_connector:
-    class: Disjfa\DemoBundle\Provider\CustomerConnector
-    arguments:
-      - '@oro_importexport.context_registry'
-      - '@oro_integration.logger.strategy'
-      - '@oro_integration.provider.connector_context_mediator'
-      - '@doctrine'
-    tags:
-      - {name: oro_integration.connector, type: customer, channel_type: disjfa_demo}
-
-  disjfa_demo.data_converter.customer:
-    class: Disjfa\DemoBundle\ImportEcport\Converter\CustomerDataConverter
-
-  disjfa_demo.processor.import_customer:
-    parent: oro_importexport.processor.import_abstract
-    calls:
-      - [setDataConverter, ['@disjfa_demo.data_converter.customer']]
-      - [setStrategy, []]

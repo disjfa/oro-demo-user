@@ -73,7 +73,7 @@ class CustomerConnector extends AbstractConnector implements ConnectorInterface
 
     protected function getConnectorSource()
     {
-        $this->transport->getCustomers($this->getLastSynchDate());
+        return $this->transport->getCustomers($this->getLastSynchDate());
     }
 
     public function getLastSynchDate()

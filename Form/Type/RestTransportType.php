@@ -3,7 +3,7 @@
 namespace Disjfa\DemoBundle\Form\Type;
 
 
-use Disjfa\DemoBundle\Entity\RestTransport;
+use Disjfa\DemoBundle\Entity\CustomerRestTransport;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -45,7 +45,7 @@ class RestTransportType extends AbstractType
     {
         $resolver->setDefaults(
             [
-                'data_class' => RestTransport::class,
+                'data_class' => CustomerRestTransport::class,
             ]
         );
     }

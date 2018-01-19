@@ -2,6 +2,7 @@
 
 namespace Disjfa\DemoBundle\Provider;
 
+use Disjfa\DemoBundle\Entity\CustomerRestTransport;
 use Disjfa\DemoBundle\Form\Type\RestTransportType;
 use Disjfa\DemoBundle\Provider\Transport\RestIterator;
 use Oro\Bundle\IntegrationBundle\Exception\InvalidConfigurationException;
@@ -22,7 +23,7 @@ class RestTransport extends AbstractRestTransport
      */
     protected function getClientBaseUrl(ParameterBag $parameterBag)
     {
-        return rtrim($parameterBag->get('endpoint'), '/') . '/' . ltrim(self::API_URL_PREFIX, '/');
+        return rtrim($parameterBag->get('endpoint'), '/') . '/';
     }
 
     /**
@@ -64,7 +65,7 @@ class RestTransport extends AbstractRestTransport
      */
     public function getSettingsEntityFQCN()
     {
-        return \Disjfa\DemoBundle\Entity\RestTransport::class;
+        return CustomerRestTransport::class;
     }
 
     public function getCustomers($lastUpdatedAt)
@@ -75,10 +76,10 @@ class RestTransport extends AbstractRestTransport
             'limit' => self::BATCH_SIZE,
         ];
 
-        if($lastUpdatedAt) {
+        if ($lastUpdatedAt) {
             $params['date'] = 1;
         }
 
-        return new RestIterator($this->getClient(), 'customers', $params);
+        return new RestIterator($this->getClient(), 'users', $params);
     }
 }

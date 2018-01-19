@@ -2,19 +2,21 @@
 
 namespace Disjfa\DemoBundle\Entity;
 
+use Doctrine\ORM\Mapping as ORM;
+
 use Oro\Bundle\AccountBundle\Entity\Account;
-use Oro\Bundle\BusinessEntitiesBundle\Entity\BasePerson;
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
+use Oro\Bundle\BusinessEntitiesBundle\Entity\BasePerson;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
-use Oro\Bundle\MagentoBundle\Entity\IntegrationEntityTrait;
-use Doctrine\ORM\Mapping as ORM;
+use Oro\Bundle\IntegrationBundle\Model\IntegrationEntityTrait;
+
 
 /**
  * @ORM\Entity
  * @ORM\Table(
- *     name="demo_customer",
- *     uniqueConstraints={@ORM\UniqueConstraint(name="unq_remote_id_channel_id", columns={"remote_id", "channel_id"})}
+ *      name="ot_prestashop_customer",
+ *      uniqueConstraints={@ORM\UniqueConstraint(name="unq_remote_id_channel_id", columns={"remote_id", "channel_id"})}
  * )
  * @Config()
  */
@@ -22,33 +24,52 @@ class Customer extends BasePerson
 {
     use IntegrationEntityTrait;
 
+    /*
+     * Do not use addresses in tutorial
+     */
+    protected $addresses;
+
     /**
      * @var integer
+     *
      * @ConfigField(
-     *     defaultValues={
-     *          "importexport"={
-     *              "identity"=true
-     *         }
-     *     }
+     *  defaultValues={
+     *      "importexport"={
+     *          "identity"=true
+     *      }
+     *  }
      * )
      * @ORM\Column(name="remote_id", type="integer", options={"unsigned"=true}, nullable=false)
      */
-    private $remoteId;
-
+    protected $remoteId;
 
     /**
      * @var Contact
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\ContactBundle\Entity\Contact", cascade={"PERSIST"})
+     *
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\ContactBundle\Entity\Contact", cascade="PERSIST")
      * @ORM\JoinColumn(name="contact_id", referencedColumnName="id", onDelete="SET NULL")
      */
-    private $contact;
+    protected $contact;
 
     /**
      * @var Account
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\AccountBundle\Entity\Account", cascade={"PERSIST"})
+     *
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\AccountBundle\Entity\Account", cascade="PERSIST")
      * @ORM\JoinColumn(name="account_id", referencedColumnName="id", onDelete="SET NULL")
      */
-    private $account;
+    protected $account;
+
+    /**
+     * @param int $remoteId
+     *
+     * @return $this
+     */
+    public function setRemoteId($remoteId)
+    {
+        $this->remoteId = $remoteId;
+
+        return $this;
+    }
 
     /**
      * @return int
@@ -59,11 +80,15 @@ class Customer extends BasePerson
     }
 
     /**
-     * @param int $remoteId
+     * @param Contact $contact
+     *
+     * @return Customer
      */
-    public function setRemoteId($remoteId)
+    public function setContact($contact)
     {
-        $this->remoteId = $remoteId;
+        $this->contact = $contact;
+
+        return $this;
     }
 
     /**
@@ -75,11 +100,15 @@ class Customer extends BasePerson
     }
 
     /**
-     * @param Contact $contact
+     * @param Account $account
+     *
+     * @return Customer
      */
-    public function setContact($contact)
+    public function setAccount($account)
     {
-        $this->contact = $contact;
+        $this->account = $account;
+
+        return $this;
     }
 
     /**
@@ -88,13 +117,5 @@ class Customer extends BasePerson
     public function getAccount()
     {
         return $this->account;
-    }
-
-    /**
-     * @param Account $account
-     */
-    public function setAccount($account)
-    {
-        $this->account = $account;
     }
 }

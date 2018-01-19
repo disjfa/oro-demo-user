@@ -1,6 +1,6 @@
 <?php
 
-namespace Disjfa\DemoBundle\ImportEcport\Converter;
+namespace Disjfa\DemoBundle\ImportExport\Converter;
 
 use Oro\Bundle\ImportExportBundle\Converter\AbstractTableDataConverter;
 
@@ -24,6 +24,7 @@ class CustomerDataConverter extends AbstractTableDataConverter
     {
         return [
             'id' => 'remoteId',
+            'name' => 'firstName',
             'email' => 'email'
         ];
     }
@@ -34,6 +35,6 @@ class CustomerDataConverter extends AbstractTableDataConverter
      */
     protected function getBackendHeader()
     {
-        throw new \Exception('Normalization is not implemented')
+        throw new \Exception('Normalization is not implemented');
     }
 }

@@ -41,12 +41,11 @@ class RestIterator extends AbstractRestIterator
      * Get rows from page data
      *
      * @param array $data
-     * @return void
+     * @return array
      */
     protected function getRowsFromPageData(array $data)
     {
-        dump($data);
-        exit;
+        return $data;
     }
 
     /**

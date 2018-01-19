@@ -12,7 +12,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Entity
  */
-class RestTransport extends Transport
+class CustomerRestTransport extends Transport
 {
 
     /**

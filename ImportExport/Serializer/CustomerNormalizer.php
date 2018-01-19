@@ -1,6 +1,6 @@
 <?php
 
-namespace Disjfa\DemoBundle\ImportEcport\Serializer;
+namespace Disjfa\DemoBundle\ImportExport\Serializer;
 
 use Disjfa\DemoBundle\Entity\Customer;
 use Oro\Bundle\DotmailerBundle\ImportExport\Serializer\ConfigurableEntityNormalizer;
@@ -13,7 +13,7 @@ class CustomerNormalizer extends ConfigurableEntityNormalizer
     /**
      * @var RegistryInterface
      */
-    private $registry;
+    protected $registry;
 
     public function __construct(FieldHelper $fieldHelper, RegistryInterface $registry)
     {
@@ -21,7 +21,7 @@ class CustomerNormalizer extends ConfigurableEntityNormalizer
         $this->registry = $registry;
     }
 
-    public function supportsNormalization($data, $type, $format = null, array $context = [])
+    public function supportsNormalization($data, $format = null, array $context = [])
     {
         return $data instanceof Customer;
     }
@@ -33,16 +33,22 @@ class CustomerNormalizer extends ConfigurableEntityNormalizer
 
     public function denormalize($data, $class, $format = null, array $context = [])
     {
+        /** @var Customer $customer */
         $customer = parent::denormalize($data, $class, $format, $context);
+
+        dump($data);
+        exit;
 
         $integration = $this->getIntegrationFromContex($context);
         $customer->setChannel($integration);
+
+        return $customer;
     }
 
     public function getIntegrationFromContex(array $contex)
     {
         if(!isset($contex['channel'])) {
-            throw new \LogicException('Context should contain reference to channel')
+            throw new \LogicException('Context should contain reference to channel');
         }
 
         return $this->registry

@@ -1,1 +1,43 @@
 services:
+  disjfa_demo.provider.customer_connector:
+    class: Disjfa\DemoBundle\Provider\CustomerConnector
+    arguments:
+      - '@oro_importexport.context_registry'
+      - '@oro_integration.logger.strategy'
+      - '@oro_integration.provider.connector_context_mediator'
+      - '@doctrine'
+    tags:
+      - {name: oro_integration.connector, type: customer, channel_type: disjfa_demo}
+
+  disjfa_demo.data_converter.customer:
+    class: Disjfa\DemoBundle\ImportExport\Converter\CustomerDataConverter
+
+  # Normalizers
+  disjfa_demo.importexport.normalizer.customer:
+    class: Disjfa\DemoBundle\ImportExport\Serializer\CustomerNormalizer
+    arguments:
+      - '@oro_entity.helper.field_helper'
+      - '@doctrine'
+    tags:
+      - { name: oro_importexport.normalizer }
+
+  disjfa_demo.importexport.normalizer.datetime:
+    class: Disjfa\DemoBundle\ImportExport\Serializer\DateTimeNormalizer
+    tags:
+      - { name: oro_importexport.normalizer }
+
+  # Strategy
+  disjfa_demo.importexport.strategy.add_or_replace:
+    class: Disjfa\DemoBundle\ImportExport\Strategy\ImportStrategy
+    parent: oro_importexport.strategy.configurable_add_or_replace
+    calls:
+      - [setLogger, [@oro_integration.logger.strategy]]
+
+  disjfa_demo.processor.import_customer:
+    parent: oro_importexport.processor.import_abstract
+    calls:
+      - [setDataConverter, ['@disjfa_demo.data_converter.customer']]
+      - [setStrategy, ['@disjfa_demo.importexport.strategy.add_or_replace']]
+      - [setEntityName, [%disjfa_demo.customer.entity.class%]]
+    tags:
+      - { name: oro_importexport.processor, type: import, entity: %disjfa_demo.customer.entity.class%, alias: disjfa_demo}
